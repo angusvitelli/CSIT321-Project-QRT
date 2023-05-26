@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onAcceptButtonClick"
+        tools:text="Done"
+        android:layout_below="@id/disclaimer_checkbox"
+        />
+
+    <TextView
+        android:id="@+id/disclaimer_text"
+        android:layout_width="369dp"
+        android:layout_height="122dp"
+        android:text="This app is provided as-is, without any warranty or guarantee of any kind. Furthermore, the application servers as an additional precaution to the safe use of qr codes, but is not a guaranteed way to prevent every single type of attack. By using this app, you agree to the terms of this disclaimer."
+        android:layout_below="@id/button"/>
+
+    <CheckBox
+        android:id="@+id/disclaimer_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="I agree to the terms of the disclaimer"
+        android:layout_below="@id/disclaimer_text"/>/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to QRT!"
+        android:textSize="36sp"
+        />
+
+</RelativeLayout>
