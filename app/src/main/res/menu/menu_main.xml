@@ -1,0 +1,23 @@
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_scanner"
+        android:icon="@drawable/scanner"
+        android:title="Scanner"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_browser"
+        android:icon="@drawable/browser"
+        android:title="Browser"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_accessibility"
+        android:icon="@drawable/accessibility"
+        android:title="Accessibility"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_info"
+        android:icon="@drawable/info"
+        android:title="Info"
+        app:showAsAction="always" />
+</menu>
