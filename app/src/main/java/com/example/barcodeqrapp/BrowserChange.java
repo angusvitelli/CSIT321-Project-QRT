@@ -29,6 +29,7 @@ public class BrowserChange extends MainActivity {
 
     private void textSetter() {
         String browser = PreferenceUtil.getDefaultBrowser(this);
+        if(browser!=null){
         if(browser.equals("com.android.chrome"))
         {
             t.setText("Google Chrome");
@@ -40,7 +41,7 @@ public class BrowserChange extends MainActivity {
         if(browser.equals("com.opera.browser"))
         {
             t.setText("Opera");
-        }
+        }}else{t.setText("Default");}
     }
 
     public void returnHome(View v){
