@@ -10,9 +10,11 @@
         android:id="@+id/returnButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
         android:onClick="returnHome"
-        android:text="Return" />
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:text="Home" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"

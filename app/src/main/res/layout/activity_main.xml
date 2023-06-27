@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:paddingBottom="30dp">
+    android:paddingBottom="0dp">
 
     <FrameLayout
         android:id="@+id/cameraContainer"
@@ -23,7 +23,9 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:text="Scan"
-        android:textSize="20dp"
+        android:textSize="25dp"
+        android:padding="10dp"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true" />
 
@@ -32,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:titleTextColor="@android:color/white"
-        android:background="@android:color/white"
+        android:background="#4285F4"
         app:title=" "
         />
 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Default Browser">
+
+        <ListPreference
+            android:key="default_browser"
+            android:title="Select Default Browser"
+            android:entries="@array/browser_entries"
+            android:entryValues="@array/browser_values"
+            android:defaultValue="@string/default_browser_value"
+            android:summary="%s"
+            android:dialogTitle="Select Default Browser" />
+    </PreferenceCategory>
+</PreferenceScreen>

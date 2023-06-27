@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">BarcodeQRApp</string>
+    <string-array name="browser_entries">
+        <item>Chrome</item>
+        <item>Firefox</item>
+        <item>Opera</item>
+        <!-- Add more browsers if needed -->
+    </string-array>
+
+    <string-array name="browser_values">
+        <item>com.android.chrome</item>
+        <item>org.mozilla.firefox</item>
+        <item>com.opera.browser</item>
+        <!-- Add package names for the corresponding browsers -->
+    </string-array>
+
+    <string name="default_browser_value">com.android.chrome</string>
 </resources>

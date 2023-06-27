@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Accessibility">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:titleTextColor="@android:color/white"
+        android:background="#4285F4"
+        app:title=" "
+        android:layout_marginBottom="25dp"
+        />
+
+    <TextView
+        android:id="@+id/textPreview"
+        android:layout_below="@+id/toolbar"
+        android:text = "Aa"
+        android:padding="25dp"
+        android:textSize = "25dp"
+        android:layout_centerHorizontal = "true"
+        android:layout_width = "wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"/>
+    <Switch
+        android:id="@+id/textSize"
+        android:padding = "10dp"
+        android:textSize="25dp"
+        android:layout_below="@id/textPreview"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:text="Change Font Size"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="25dp"/>
+
+    <Switch
+        android:id="@+id/changeColour"
+        android:padding = "10dp"
+        android:textSize="25dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/textSize"
+        android:text="High Colour Contrast"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="25dp"/>
+    <Button
+        android:id="@+id/button4"
+        android:onClick="returnHome"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:text ="Home"/>
+
+</RelativeLayout>

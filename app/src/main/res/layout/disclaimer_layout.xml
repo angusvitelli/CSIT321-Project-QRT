@@ -1,4 +1,4 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,33 +10,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onAcceptButtonClick"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="431dp"
-        tools:text="Done" />
+        android:text ="Done"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/disclaimer_checkbox"
+        />
 
     <TextView
         android:id="@+id/disclaimer_text"
-        android:layout_width="369dp"
-        android:layout_height="122dp"
-        android:text="This app is provided as-is, without any warranty or guarantee of any kind. Furthermore, the application servers as an additional precaution to the safe use of qr codes, but is not a guaranteed way to prevent every single type of attack. By using this app, you agree to the terms of this disclaimer."
-        tools:layout_editor_absoluteX="21dp"
-        tools:layout_editor_absoluteY="185dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_centerInParent="true"
+        android:textSize="15sp"
+        android:padding="40dp"
+        android:text="This app is provided as-is, without any warranty or guarantee of any kind. Furthermore, the application servers as an additional precaution to the safe use of qr codes, but is not a guaranteed way to prevent every single type of attack. By using this app, you agree to the terms of this disclaimer." />
 
     <CheckBox
         android:id="@+id/disclaimer_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/disclaimer_text"
+        android:layout_centerHorizontal="true"
+        android:padding="40dp"
         android:text="I agree to the terms of the disclaimer"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="332dp" />
+       />
 
     <TextView
         android:id="@+id/textView"
+        android:paddingTop="40dp"
+        android:paddingBottom="40dp"
+        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Welcome to QRT!"
-        android:textSize="36sp"
-        tools:layout_editor_absoluteX="67dp"
-        tools:layout_editor_absoluteY="96dp" />
+        android:textSize="36sp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

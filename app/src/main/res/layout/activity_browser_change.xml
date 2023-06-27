@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BrowserChange">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:titleTextColor="@android:color/white"
+        android:background="#4285F4"
+        app:title=" "
+        />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_below="@+id/toolbar"
+        android:padding = "10dp"
+        android:textSize="25dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="What browser would you like to use for accessed links?" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_below="@+id/textView2"
+        android:layout_alignLeft="@id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="25dp"
+        android:text="Current browser:"
+        android:layout_marginBottom="15dp"/>
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_below="@+id/textView2"
+        android:layout_alignRight="@id/textView2"
+        android:padding="10dp"
+        android:textSize="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_marginBottom="50dp"/>
+
+    <Button
+        android:id="@+id/button"
+        android:onClick="doChange"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/textView4"
+        android:text ="Chrome"
+        android:layout_marginBottom="25dp"/>
+
+    <Button
+        android:id="@+id/button2"
+        android:onClick="doChange"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/button"
+        android:layout_centerHorizontal="true"
+        android:text ="Firefox"
+        android:layout_marginBottom="25dp"/>
+
+    <Button
+        android:id="@+id/button3"
+        android:onClick="doChange"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/button2"
+        android:layout_centerHorizontal="true"
+        android:text ="Opera"
+        android:layout_marginBottom="25dp"/>
+
+    <Button
+        android:id="@+id/button4"
+        android:onClick="returnHome"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text ="Home"/>
+
+</RelativeLayout>

@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -73,13 +74,21 @@ public class MainActivity extends AppCompatActivity {
         int itemId = item.getItemId();
         switch(itemId){
             case R.id.action_scanner:
+                Intent i5 = new Intent(this, MainActivity.class);
+                startActivity(i5);
                 scanCode();
                 return true;
             case R.id.action_browser:
+                Intent i = new Intent(this, BrowserChange.class);
+                startActivity(i);
                 return true;
             case R.id.action_accessibility:
+                Intent i2 = new Intent(this, Accessibility.class);
+                startActivity(i2);
                 return true;
             case R.id.action_info :
+                Intent i3 = new Intent(this, Information.class);
+                startActivity(i3);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -132,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void scanCode() {
+    public void scanCode() {
         ScanOptions options = new ScanOptions();
         options.setPrompt("Adjust the volume to enable flash");
         options.setBeepEnabled(true);
@@ -195,6 +204,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(QRT));
+                startActivity(intent);
             }
         }).show();
     }

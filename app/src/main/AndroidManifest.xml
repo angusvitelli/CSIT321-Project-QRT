@@ -14,21 +14,30 @@
         android:theme="@style/Theme.BarcodeQRApp"
         tools:targetApi="31">
         <activity
+            android:name=".Information"
+            android:exported="false" />
+        <activity
+            android:name=".Accessibility"
+            android:exported="false" />
+        <activity
+            android:name=".BrowserChange"
+            android:exported="false" />
+        <activity
             android:name=".InformationScreen"
             android:exported="false" />
         <activity
             android:name=".DisclaimerActivity"
-            android:label="@string/app_name"
-            android:exported="true">
+            android:exported="true"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".CaptureEnable"
             android:screenOrientation="portrait"

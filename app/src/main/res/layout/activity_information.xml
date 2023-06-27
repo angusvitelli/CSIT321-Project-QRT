@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Information">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:titleTextColor="@android:color/white"
+        android:background="#4285F4"
+        app:title=" "
+        />
+
+    <TextView
+        android:id="@+id/disclaimer_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:textSize="25dp"
+        android:padding="40dp"
+        android:text="This app is provided as-is, without any warranty or guarantee of any kind. Furthermore, the application servers as an additional precaution to the safe use of qr codes, but is not a guaranteed way to prevent every single type of attack. By using this app, you agree to the terms of this disclaimer." />
+
+    <Button
+        android:id="@+id/button4"
+        android:onClick="returnHome"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:text ="Home"
+        />
+
+</RelativeLayout>
