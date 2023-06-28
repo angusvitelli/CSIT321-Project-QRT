@@ -26,11 +26,32 @@ import android.widget.FrameLayout;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
+import java.security.spec.EncodedKeySpec;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
+
 public class MainActivity extends AppCompatActivity {
 
     Button scanButton;
+    URI uri;
     String QRT = "";
     Boolean trustHttps;
+    Boolean certificateStatus;
+    Boolean noUnicode;
+    String unicodeStatus;
     int trustScore = 0;
     String trustMessage;
     private static final int REQUEST_CAMERA_PERMISSION = 200;
@@ -158,11 +179,6 @@ public class MainActivity extends AppCompatActivity {
         }else{
             trustHttps = false;
         }
-
-        //Detect modifications to url test
-        //Detect website population
-        //Create QR Code Template for QR Code Generation
-        // QR consists of DATA/METADATA/TAG
     }
 
     private void contentsCheck() {
@@ -172,6 +188,8 @@ public class MainActivity extends AppCompatActivity {
         if(isValid){
             // This means the QR contains URL
             trustURLTest();
+            unicodeTest();
+            //websitePopulationTest() TODO
             trustWeightingTest();
         }else{
             // This means the QR contains a message:: Check message contains anything potentially malicious by verifying publishers.
@@ -179,13 +197,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void trustWeightingTest() {
-        if(trustScore<50){
-            trustMessage = "High Risk";
+        if(certificateStatus)
+        {
+            trustMessage="This Link Is QRT Verified";
             runPopUp();
         }
-        else if(trustScore>=50){
-            trustMessage = "Moderate Risk";
-            runPopUp();
+        else {
+            if (trustScore < 50) {
+                trustMessage = "High Risk";
+                runPopUp();
+            } else if (trustScore >= 50) {
+                trustMessage = "Moderate Risk";
+                runPopUp();
+            }
         }
     }
 
@@ -224,7 +248,67 @@ public class MainActivity extends AppCompatActivity {
     ActivityResultLauncher<ScanOptions> barLaunch = registerForActivityResult(new ScanContract(), result -> {
         if(result.getContents() != null) {
             QRT = result.getContents();
+            try {
+                certificateCheck(); //This looks for certificate in qr metadata
+            } catch (JSONException e) {
+                return;
+            } catch (NoSuchAlgorithmException e) {
+                return;
+            } catch (InvalidKeySpecException e) {
+                return;
+            } catch (InvalidKeyException e) {
+                return;
+            } catch (UnsupportedEncodingException e) {
+                return;
+            } catch (SignatureException e) {
+                return;
+            }
+            //trustDatabaseTest() TODO
             contentsCheck();
         }
     });
+
+    private void certificateCheck() throws JSONException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, UnsupportedEncodingException, SignatureException {
+        String jsonObjectString = QRT.substring(QRT.indexOf('{'), QRT.lastIndexOf('}') + 1);
+
+        // Pass json data back into object then retrieve algorithm initialise keyfactory.
+        JSONObject obj = new JSONObject(jsonObjectString);
+        Signature ecdsaVerify = Signature.getInstance(obj.getString("algorithm"));
+        KeyFactory kf = KeyFactory.getInstance("EC");
+
+        //Retrieve public key from file
+        EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(obj.getString("publicKey")));
+        PublicKey publicKey = kf.generatePublic(publicKeySpec);
+        //Attach the public key to verify the signature of the certificate
+        ecdsaVerify.initVerify(publicKey);
+        ecdsaVerify.update(obj.getString("id").getBytes("UTF-8"));
+
+        //Finally using signature check if the key is consistent with the contained content
+        boolean valid = ecdsaVerify.verify(Base64.getDecoder().decode(obj.getString("signature")));
+
+        if (valid==true){
+            certificateStatus=true;
+            trustWeightingTest();
+        }
+        else{
+            certificateStatus=false;
+            return;
+        }
+    }
+    private void unicodeTest() {
+        try {
+            uri = new URI(QRT);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        if (uri != null && uri.isOpaque()) {
+            noUnicode = false;
+            unicodeStatus = "This URL contains Unicode";
+        } else {
+            noUnicode = true;
+            trustScore += 50;
+            unicodeStatus = "No Unicode";
+        }
+    }
 }
