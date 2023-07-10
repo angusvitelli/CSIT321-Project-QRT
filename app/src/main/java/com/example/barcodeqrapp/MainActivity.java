@@ -14,18 +14,20 @@ import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+
+
+import java.security.Security;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.ViewGroup;
+
 import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,17 +43,17 @@ import java.security.SignatureException;
 import java.security.spec.EncodedKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
+
 
 public class MainActivity extends AppCompatActivity {
 
     Button scanButton;
     URI uri;
     String QRT = "";
-    Boolean trustHttps;
-    Boolean certificateStatus;
-    Boolean noUnicode;
-    String unicodeStatus;
+    static Boolean trustHttps;
+    static Boolean certificateStatus = false;
+    static Boolean noUnicode;
+    static String unicodeStatus;
     int trustScore = 0;
     String trustMessage;
     private static final int REQUEST_CAMERA_PERMISSION = 200;
@@ -62,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        cameraContainer = findViewById(R.id.cameraContainer);
 
         scanButton = findViewById(R.id.scanButton);
 
@@ -80,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
                     REQUEST_CAMERA_PERMISSION);
         } else {
             // Camera permission granted, start the camera
-            startCamera();
         }
     }
 
@@ -97,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_scanner:
                 Intent i5 = new Intent(this, MainActivity.class);
                 startActivity(i5);
-                scanCode();
                 return true;
             case R.id.action_browser:
                 Intent i = new Intent(this, BrowserChange.class);
@@ -116,52 +115,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void startCamera() {
-        // Create an instance of the Camera
-        camera = Camera.open();
-
-        // Create a SurfaceView to display the camera preview
-        SurfaceView surfaceView = new SurfaceView(this);
-
-        // Set the layoutParams to match_parent
-        surfaceView.setLayoutParams(new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-
-        // Add the SurfaceView to the camera container
-        cameraContainer.addView(surfaceView);
-
-        // Get the SurfaceHolder for the SurfaceView
-        SurfaceHolder surfaceHolder = surfaceView.getHolder();
-
-        // Add a callback to handle SurfaceHolder events
-        surfaceHolder.addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                // Set the SurfaceHolder for the Camera
-                try {
-                    camera.setPreviewDisplay(holder);
-                    camera.startPreview();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                // Handle surface changes, if needed
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                // Release the Camera and remove the SurfaceView
-                camera.stopPreview();
-                camera.release();
-                camera = null;
-                cameraContainer.removeView(surfaceView);
-            }
-        });
-    }
     public void scanCode() {
         ScanOptions options = new ScanOptions();
         options.setPrompt("Adjust the volume to enable flash");
@@ -235,66 +188,71 @@ public class MainActivity extends AppCompatActivity {
         }).show();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Release the Camera if it's still open
-        if (camera != null) {
-            camera.release();
-            camera = null;
-        }
-    }
-
     ActivityResultLauncher<ScanOptions> barLaunch = registerForActivityResult(new ScanContract(), result -> {
         if(result.getContents() != null) {
             QRT = result.getContents();
             try {
                 certificateCheck(); //This looks for certificate in qr metadata
             } catch (JSONException e) {
-                return;
-            } catch (NoSuchAlgorithmException e) {
-                return;
-            } catch (InvalidKeySpecException e) {
-                return;
-            } catch (InvalidKeyException e) {
-                return;
-            } catch (UnsupportedEncodingException e) {
-                return;
-            } catch (SignatureException e) {
-                return;
             }
             //trustDatabaseTest() TODO
             contentsCheck();
         }
     });
 
-    private void certificateCheck() throws JSONException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, UnsupportedEncodingException, SignatureException {
-        String jsonObjectString = QRT.substring(QRT.indexOf('{'), QRT.lastIndexOf('}') + 1);
+    private void certificateCheck() throws JSONException {
+        JSONObject obj = null;
+        String base64PublicKey = null;
+        try {
+            String result = QRT;
 
-        // Pass json data back into object then retrieve algorithm initialise keyfactory.
-        JSONObject obj = new JSONObject(jsonObjectString);
-        Signature ecdsaVerify = Signature.getInstance(obj.getString("algorithm"));
-        KeyFactory kf = KeyFactory.getInstance("EC");
+            int startIndex = result.indexOf('{');
+            // Extract the substring before the JSON object
+            String substringBeforeJson = result.substring(0, startIndex);
+            QRT = substringBeforeJson;
 
-        //Retrieve public key from file
-        EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(obj.getString("publicKey")));
-        PublicKey publicKey = kf.generatePublic(publicKeySpec);
-        //Attach the public key to verify the signature of the certificate
-        ecdsaVerify.initVerify(publicKey);
-        ecdsaVerify.update(obj.getString("id").getBytes("UTF-8"));
+            // Extract the JSON object
+            String jsonObjectString = result.substring(result.indexOf('{'), result.lastIndexOf('}') + 1);
 
-        //Finally using signature check if the key is consistent with the contained content
-        boolean valid = ecdsaVerify.verify(Base64.getDecoder().decode(obj.getString("signature")));
+            // Pass JSON data back into object then retrieve algorithm initialize KeyFactory.
+            obj = new JSONObject(jsonObjectString);
+            Signature ecdsaVerify = Signature.getInstance(obj.getString("algorithm"));
+            KeyFactory kf = KeyFactory.getInstance("EC");
 
-        if (valid==true){
-            certificateStatus=true;
-            trustWeightingTest();
-        }
-        else{
-            certificateStatus=false;
-            return;
+            //Retrieve and decode public key
+            base64PublicKey = obj.getString("publicKey").replaceAll("\\s", "");
+            byte[] publicKeyBytes = Base64.decode(base64PublicKey, Base64.DEFAULT);
+            // Log the byte array as a readable string representation
+
+            EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
+
+            //Generate the PublicKey object using the KeyFactory
+            PublicKey publicKey = kf.generatePublic(publicKeySpec); //TODO figure out why this is not loading the string to public key
+
+            // Attach the public key to verify the signature of the certificate
+            ecdsaVerify.initVerify(publicKey);
+            ecdsaVerify.update(obj.getString("id").getBytes("UTF-8"));
+
+            // Finally, use the signature to check if the key is consistent with the contained content
+            byte[] decodedSignature = Base64.decode(obj.getString("signature"), Base64.DEFAULT);
+            boolean valid = ecdsaVerify.verify(decodedSignature);
+
+            if (valid) {
+                certificateStatus = true;
+                trustWeightingTest();
+
+            } else {
+                certificateStatus = false;
+            }
+
+        } catch (JSONException | NoSuchAlgorithmException | InvalidKeySpecException |
+                 InvalidKeyException | UnsupportedEncodingException | SignatureException e) {
+            // Handle the exception or display an error message for debugging
+            Log.e("CertificateCheck", "Exception occurred", e);
+            Log.e("publicKey", base64PublicKey);
         }
     }
+
     private void unicodeTest() {
         try {
             uri = new URI(QRT);

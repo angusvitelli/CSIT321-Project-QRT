@@ -7,16 +7,26 @@
     tools:context=".MainActivity"
     android:paddingBottom="0dp">
 
-    <FrameLayout
-        android:id="@+id/cameraContainer"
-        android:layout_width="300dp"
-        android:layout_height="550dp"
-        android:layout_gravity="center"
-        android:layout_centerInParent="true">
+    <TextView
+        android:id="@+id/textView"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Welcome to QRT!"
+        android:layout_centerInParent="true"
 
-        <!-- Camera Preview will be added dynamically -->
+        android:layout_centerHorizontal="true"
+        android:padding="20dp"
+        android:textSize="25dp"/>
 
-    </FrameLayout>
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Hit scan to get started."
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:padding="20dp"
+        android:textSize="15dp"/>
 
     <Button
         android:id="@+id/scanButton"
